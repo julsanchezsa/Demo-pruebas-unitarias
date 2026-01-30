@@ -32,26 +32,30 @@ jobs:
       run: npx playwright install --with-deps
 
     # --- FASE 1: PRUEBAS UNITARIAS CON COBERTURA ---
+    # Objetivo: Verificar lógica de negocio y asegurar % mínimo de código probado
     - name: 1. Ejecutar Pruebas Unitarias (Jest + Cobertura)
       run: npm run test:coverage
-      # Esto prueba tu lógica (logica.js) y genera reportes de cobertura
+      # Genera carpeta 'coverage/' y 'test-results/junit.xml'
 
-    # --- FASE 2: PRUEBAS E2E ---
+    # --- FASE 2: PRUEBAS E2E (EXTREMO A EXTREMO) ---
+    # Objetivo: Verificar experiencia de usuario real simulando un navegador
     - name: 2. Ejecutar Pruebas E2E (Playwright)
       run: npm run test:e2e
-      # Esto prueba la navegación en Wikipedia
+      # Genera 'playwright-report' y videos si algo falla
 
-    # --- FASE 3: ANÁLISIS SONARCLOUD ---
+    # --- FASE 3: ANÁLISIS SONARCLOUD (QUALITY GATE) ---
+    # Objetivo: Enviar métricas a SonarCloud para aprobar/rechazar el código
     - name: 3. SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
+      uses: SonarSource/sonarqube-scan-action@v5.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Token de GitHub (automático)
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Token que configuraste en Secrets
 
     # --- FASE 4: REPORTES Y ARTEFACTOS ---
+    # Objetivo: Guardar evidencias de las pruebas para descargar después
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v4
-      if: always()
+      if: always() # Se ejecuta aunque fallen las pruebas anteriores
       with:
         name: coverage-report
         path: coverage/

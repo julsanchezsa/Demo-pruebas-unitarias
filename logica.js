@@ -1,93 +1,88 @@
 // logica.js
-// Funciones de lógica pura: NO dependen de navegador, base de datos ni APIs externas.
-// Esto es ideal para pruebas unitarias porque son rápidas, determinísticas y fáciles de aislar.
+// ==============================================================================
+// LÓGICA DE NEGOCIO (EL CORAZÓN DE LA APP)
+// Funciones puras que NO dependen de bases de datos, APIs ni navegador.
+// Estas son las candidatas perfectas para pruebas unitarias.
+// ==============================================================================
 
 /**
- * Valida si una contraseña es "segura" según reglas de negocio simples.
- * Reglas de ejemplo (ideales para explicar en la presentación):
+ * 1. Valida si una contraseña es segura.
+ * Reglas de negocio:
  * - Mínimo 8 caracteres
- * - Debe contener al menos un número
- * - Debe contener al menos una letra mayúscula
+ * - Al menos un número
+ * - Al menos una mayúscula
  */
 function validarPassword(password) {
-  // Validación defensiva: si no es string, la consideramos inválida
+  // Validación defensiva (Robustez)
   if (typeof password !== 'string') {
     return false;
   }
 
-  // Regla 1: longitud mínima
+  // Regla 1: Longitud
   if (password.length < 8) {
     return false;
   }
 
-  // Regla 2: al menos un dígito
+  // Regla 2: Dígitos
   const tieneNumero = /[0-9]/.test(password);
   if (!tieneNumero) {
     return false;
   }
 
-  // Regla 3: al menos una mayúscula
+  // Regla 3: Mayúsculas
   const tieneMayuscula = /[A-Z]/.test(password);
   if (!tieneMayuscula) {
     return false;
   }
 
-  // Si pasa todas las reglas, consideramos la contraseña válida
   return true;
 }
 
 /**
- * Valida si un email tiene formato correcto.
- * Útil para demostrar pruebas con expresiones regulares.
- * @param {string} email - El email a validar
- * @returns {boolean} - true si el formato es válido
+ * 2. Valida el formato de un correo electrónico.
+ * Ejemplo de uso de Expresiones Regulares (Regex) en testing.
  */
 function validarEmail(email) {
   if (typeof email !== 'string') {
     return false;
   }
 
-  // Expresión regular básica para validar emails
+  // Regex estándar para emails
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
 /**
- * Calcula el precio final aplicando un descuento.
- * Ejemplo perfecto de lógica de negocio con edge cases.
- * @param {number} precio - Precio original (debe ser positivo)
- * @param {number} porcentajeDescuento - Porcentaje de descuento (0-100)
- * @returns {number} - Precio final con descuento aplicado
+ * 3. Calcula un descuento comercial.
+ * Ideal para probar "Edge Cases" (casos límite): 0%, 100%, negativos.
  */
 function calcularDescuento(precio, porcentajeDescuento) {
-  // Validación de tipos
+  // Validación de tipos de datos
   if (typeof precio !== 'number' || typeof porcentajeDescuento !== 'number') {
     return null;
   }
 
-  // Validación de valores negativos
+  // Reglas de negocio: No aceptar valores negativos
   if (precio < 0 || porcentajeDescuento < 0) {
     return null;
   }
 
-  // El descuento no puede ser mayor a 100%
+  // Regla de negocio: Descuento máximo 100%
   if (porcentajeDescuento > 100) {
     return null;
   }
 
-  // Cálculo del descuento
+  // Lógica matemática
   const descuento = precio * (porcentajeDescuento / 100);
   const precioFinal = precio - descuento;
 
-  // Redondear a 2 decimales para evitar problemas de punto flotante
+  // Redondeo a 2 decimales (importante en sistemas financieros)
   return Math.round(precioFinal * 100) / 100;
 }
 
 /**
- * Verifica si un usuario es mayor de edad.
- * Ejemplo simple para demostrar pruebas con fechas.
- * @param {Date} fechaNacimiento - Fecha de nacimiento del usuario
- * @returns {boolean} - true si tiene 18 años o más
+ * 4. Verifica mayoría de edad.
+ * Ejemplo de prueba con fechas (un dolor de cabeza común en tests).
  */
 function esMayorDeEdad(fechaNacimiento) {
   if (!(fechaNacimiento instanceof Date) || isNaN(fechaNacimiento)) {
@@ -99,7 +94,7 @@ function esMayorDeEdad(fechaNacimiento) {
   const mesActual = hoy.getMonth();
   const mesNacimiento = fechaNacimiento.getMonth();
 
-  // Ajuste si aún no ha cumplido años este año
+  // Ajuste preciso si aún no ha cumplido años este mes
   if (mesActual < mesNacimiento ||
     (mesActual === mesNacimiento && hoy.getDate() < fechaNacimiento.getDate())) {
     return edad - 1 >= 18;
