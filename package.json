@@ -1,0 +1,22 @@
+{
+  "name": "demo-calidad-total",
+  "version": "1.0.0",
+  "description": "Demostración de automatización de pruebas unitarias y E2E",
+  "main": "index.js",
+  "scripts": {
+    "test:unit": "jest",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test": "npm run lint && npm run test:unit && npm run test:e2e",
+    "lint": "eslint . --ext .js --ignore-pattern node_modules/ --ignore-pattern coverage/ --ignore-pattern playwright-report/",
+    "lint:fix": "eslint . --ext .js --fix --ignore-pattern node_modules/"
+  },
+  "keywords": ["testing", "jest", "playwright", "ci-cd", "eslint", "sonarcloud"],
+  "author": "Julia",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0"
+  }
+}
