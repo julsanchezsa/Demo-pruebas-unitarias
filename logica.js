@@ -113,28 +113,28 @@ function esMayorDeEdad(fechaNacimiento) {
  * 3. Code Smell: Código inalcanzable (Unreachable Code).
  * 4. Code Smell: Variable declarada pero no usada.
  */
-function procesarPagoInseguro(monto) {
-  var tarjeta = "1234-5678-9012-3456"; // CODE SMELL: var en lugar de const/let
-  console.log("Procesando tarjeta: " + tarjeta); // SECURITY HOTSPOT: Loguear info sensible
+// function procesarPagoInseguro(monto) {
+//   var tarjeta = "1234-5678-9012-3456"; // CODE SMELL: var en lugar de const/let
+//   console.log("Procesando tarjeta: " + tarjeta); // SECURITY HOTSPOT: Loguear info sensible
 
-  if (monto === 0) {
-    return 0;
-  }
+//   if (monto === 0) {
+//     return 0;
+//   }
 
-  let resultado = 100 / 0; // BUG: División por cero (Infinity en JS, pero mal diseño)
+//   let resultado = 100 / 0; // BUG: División por cero (Infinity en JS, pero mal diseño)
 
-  return true;
+//   return true;
 
-  // CODE SMELL: Código inalcanzable (después del return)
-  let mensaje = "Esto nunca se ejecutará";
-  console.log(mensaje);
-}
+//   // CODE SMELL: Código inalcanzable (después del return)
+//   let mensaje = "Esto nunca se ejecutará";
+//   console.log(mensaje);
+// }
 
 module.exports = {
   validarPassword,
   validarEmail,
   calcularDescuento,
   esMayorDeEdad,
-  procesarPagoInseguro, // Salta los errores en SonarCloud
+  // procesarPagoInseguro, // Salta los errores en SonarCloud
 };
 
